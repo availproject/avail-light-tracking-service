@@ -36,17 +36,14 @@ mod tests {
 
     #[test]
     fn test_valid_signature() {
-        // Generate a keypair for testing
         let pair = Sr25519Pair::generate().0;
         let public_key = pair.public();
         let ss58_public_key = public_key.to_ss58check();
 
-        // Create and sign a message
         let message = create_test_message();
         let message_bytes = serde_json::to_vec(&message).unwrap();
         let signature = pair.sign(&message_bytes);
 
-        // Verify the signature
         let result = verify_sr25519_signature(&ss58_public_key, &message, signature.to_vec());
 
         assert!(result.is_ok());
@@ -55,7 +52,6 @@ mod tests {
 
     #[test]
     fn test_invalid_signature() {
-        // Generate two different keypairs
         let pair1 = Sr25519Pair::generate().0;
         let pair2 = Sr25519Pair::generate().0;
         let public_key1 = pair1.public();
@@ -99,56 +95,44 @@ mod tests {
         assert!(matches!(result.unwrap_err(), ApiError::InvalidSignature));
     }
 
-    // #[test]
-    // fn test_tampered_message() {
-    //     let pair = Sr25519Pair::generate().0;
-    //     let public_key = pair.public();
-    //     let ss58_public_key = public_key.to_ss58check();
+    #[test]
+    fn test_tampered_message() {
+        let pair = Sr25519Pair::generate().0;
+        let public_key = pair.public();
+        let ss58_public_key = public_key.to_ss58check();
 
-    //     // Sign original message
-    //     let original_message = create_test_message();
-    //     let message_bytes = serde_json::to_vec(&original_message).unwrap();
-    //     let signature = pair.sign(&message_bytes);
+        let original_message = create_test_message();
+        let message_bytes = serde_json::to_vec(&original_message).unwrap();
+        let signature = pair.sign(&message_bytes);
 
-    //     // Create tampered message
-    //     let mut tampered_message = original_message.clone();
-    //     tampered_message.peer_id =
-    //         "12D3KooWHDNG8W9q4oVqfJ8CG7G6XwzHhp3QbKSU4LGKrH9NVsJN".to_string();
+        let mut tampered_message = original_message.clone();
+        tampered_message.peer_id =
+            "12D3KooWHDNG8W9q4oVqfJ8CG7G6XwzHhp3QbKSU4LGKrH9NVsJN".to_string();
 
-    //     // Verify with tampered message
-    //     let result = verify_sr25519_signature(
-    //         &ss58_public_key,
-    //         &tampered_message,
-    //         signature.as_ref().to_vec(),
-    //     );
+        let result =
+            verify_sr25519_signature(&ss58_public_key, &tampered_message, signature.to_vec());
 
-    //     assert!(result.is_ok());
-    //     assert!(!result.unwrap());
-    // }
+        assert!(result.is_ok());
+        assert!(!result.unwrap());
+    }
 
-    // #[test]
-    // fn test_modified_timestamp() {
-    //     let pair = Sr25519Pair::generate().0;
-    //     let public_key = pair.public();
-    //     let ss58_public_key = public_key.to_ss58check();
+    #[test]
+    fn test_modified_timestamp() {
+        let pair = Sr25519Pair::generate().0;
+        let public_key = pair.public();
+        let ss58_public_key = public_key.to_ss58check();
 
-    //     // Sign original message
-    //     let original_message = create_test_message();
-    //     let message_bytes = serde_json::to_vec(&original_message).unwrap();
-    //     let signature = pair.sign(&message_bytes);
+        let original_message = create_test_message();
+        let message_bytes = serde_json::to_vec(&original_message).unwrap();
+        let signature = pair.sign(&message_bytes);
 
-    //     // Create message with modified timestamp
-    //     let mut modified_message = original_message.clone();
-    //     modified_message.timestamp = 9876543210;
+        let mut modified_message = original_message.clone();
+        modified_message.timestamp = 9876543210;
 
-    //     // Verify with modified message
-    //     let result = verify_sr25519_signature(
-    //         &ss58_public_key,
-    //         &modified_message,
-    //         signature.as_ref().to_vec(),
-    //     );
+        let result =
+            verify_sr25519_signature(&ss58_public_key, &modified_message, signature.to_vec());
 
-    //     assert!(result.is_ok());
-    //     assert!(!result.unwrap());
-    // }
+        assert!(result.is_ok());
+        assert!(!result.unwrap());
+    }
 }
