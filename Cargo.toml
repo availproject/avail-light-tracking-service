@@ -12,3 +12,7 @@ sp-core = { version = "34.0.0", features = ["full_crypto"] }
 sp-io = { version = "38.0.0", default-features = false, features = ["std"] }
 hex = "0.4"
 thiserror = "1.0"
+tracing = "0.1.35"
+tracing-subscriber = { version = "0.3.17", features = ["json", "env-filter"] }
+clap = { version = "4.3.23", features = ["derive", "cargo"] }
+anyhow = { version = "1.0" }
