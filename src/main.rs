@@ -1,17 +1,10 @@
 use actix_web::{web, App, HttpServer};
 use anyhow::Result;
+use avail_light_tracking_service::{cli::CliOpts, handlers, storage::RocksStorage};
 use clap::Parser;
-use cli::CliOpts;
 use std::sync::Arc;
-use storage::RocksStorage;
 use tracing::{info, Level, Subscriber};
 use tracing_subscriber::{EnvFilter, FmtSubscriber};
-
-mod cli;
-mod error;
-mod handlers;
-mod storage;
-mod types;
 
 pub fn default_subscriber(log_level: Level) -> impl Subscriber {
     FmtSubscriber::builder()
@@ -27,12 +20,16 @@ async fn main() -> Result<()> {
     tracing::subscriber::set_global_default(default_subscriber(opts.verbosity))?;
 
     info!("Starting Avail Light Tracking Service");
+    info!(
+        "Listening on: {}",
+        format!("{}:{}", opts.server_addr, opts.server_port)
+    );
     let storage = Arc::new(RocksStorage::new(opts.db_path).expect("Failed to initialize storage"));
 
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::from(Arc::clone(&storage)))
-            .route("/ping", web::get().to(handlers::handle_ping))
+            .route("/ping", web::post().to(handlers::handle_ping))
     })
     .bind(format!("{}:{}", opts.server_addr, opts.server_port))?
     .run()
