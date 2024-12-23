@@ -1,6 +1,6 @@
 use actix_web::{web, App, HttpServer};
 use anyhow::Result;
-use avail_light_tracking_service::{cli::CliOpts, handlers, storage::RocksStorage};
+use avail_light_tracking_service::{cli::ServerCliOpts, handlers, storage::RocksStorage};
 use clap::Parser;
 use std::sync::Arc;
 use tracing::{info, Level, Subscriber};
@@ -16,7 +16,7 @@ pub fn default_subscriber(log_level: Level) -> impl Subscriber {
 
 #[actix_web::main]
 async fn main() -> Result<()> {
-    let opts = CliOpts::parse();
+    let opts = ServerCliOpts::parse();
     tracing::subscriber::set_global_default(default_subscriber(opts.verbosity))?;
 
     info!("Starting Avail Light Tracking Service");
