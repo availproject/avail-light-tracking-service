@@ -12,9 +12,7 @@ use tracing_subscriber::{EnvFilter, FmtSubscriber};
 
 pub fn default_subscriber(log_level: Level) -> impl Subscriber {
     FmtSubscriber::builder()
-        .with_env_filter(EnvFilter::new(format!(
-            "avail_light_tracking_service={log_level}"
-        )))
+        .with_env_filter(EnvFilter::new(format!("test_client={log_level}")))
         .finish()
 }
 
@@ -26,6 +24,7 @@ async fn main() -> Result<()> {
     // Generate a new keypair
     let pair = Sr25519Pair::generate().0;
     let public_key = pair.public();
+    info!("Public key: {}", public_key.to_string());
     let ss58_public_key = public_key.to_ss58check();
 
     // Create a ping message

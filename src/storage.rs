@@ -1,6 +1,10 @@
-use crate::error::ApiError;
-use rocksdb::DB;
+use crate::{
+    error::ApiError,
+    types::{ClientInfo, PingMessage},
+};
+use rocksdb::{IteratorMode, DB};
 use std::path::Path;
+use tracing::info;
 
 pub struct RocksStorage {
     db: DB,
@@ -16,5 +20,51 @@ impl RocksStorage {
         self.db
             .put(key, value)
             .map_err(|e| ApiError::DatabaseError(e.to_string()))
+    }
+
+    pub fn get_client_info(&self, public_key: &str) -> Result<Option<ClientInfo>, ApiError> {
+        let mut timestamps = Vec::new();
+        let mut last_ping: Option<PingMessage> = None;
+
+        let iter = self.db.iterator(IteratorMode::End);
+
+        for item in iter {
+            let (key, value) = item.map_err(|e| ApiError::DatabaseError(e.to_string()))?;
+
+            let key_str = String::from_utf8_lossy(&key);
+            let parts: Vec<&str> = key_str.split(':').collect();
+
+            if parts.len() == 2 && parts[1] == public_key {
+                let ping: PingMessage = serde_json::from_slice(&value)
+                    .map_err(|e| ApiError::SerializationError(e.to_string()))?;
+
+                timestamps.push(ping.timestamp);
+                if last_ping.is_none() {
+                    last_ping = Some(ping);
+                }
+            }
+        }
+
+        if let Some(last_message) = last_ping {
+            if !timestamps.is_empty() {
+                timestamps.sort_unstable();
+
+                // Calculate total uptime
+                // For this example, we'll assume each ping represents 1 minute of uptime
+                let total_uptime = timestamps.len() as i64 * 60; // Convert to seconds
+
+                Ok(Some(ClientInfo {
+                    first_seen: *timestamps.first().unwrap(),
+                    last_seen: *timestamps.last().unwrap(),
+                    total_uptime,
+                    peer_id: last_message.peer_id,
+                    last_multiaddr: last_message.multiaddr,
+                }))
+            } else {
+                Ok(None)
+            }
+        } else {
+            Ok(None)
+        }
     }
 }

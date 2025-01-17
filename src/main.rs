@@ -30,6 +30,10 @@ async fn main() -> Result<()> {
         App::new()
             .app_data(web::Data::from(Arc::clone(&storage)))
             .route("/ping", web::post().to(handlers::handle_ping))
+            .route(
+                "/client-info/{peer_id}",
+                web::get().to(handlers::handle_client_info),
+            )
     })
     .bind(format!("{}:{}", opts.server_addr, opts.server_port))?
     .run()

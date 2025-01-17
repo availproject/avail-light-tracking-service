@@ -29,7 +29,7 @@ pub struct ServerCliOpts {
 pub struct ClientCliOpts {
     #[arg(
         long,
-        default_value = "127.0.0.1",
+        default_value = "http://127.0.0.1",
         help = "Avail Light Client Tracker listen address. Default: 127.0.0.1"
     )]
     pub server_addr: String,
