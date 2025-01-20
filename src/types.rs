@@ -19,7 +19,6 @@ pub struct SignedPingMessage {
 pub struct ClientInfo {
     pub first_seen: i64,
     pub last_seen: i64,
-    pub total_uptime: i64,
     pub peer_id: String,
     pub last_multiaddr: String,
 }

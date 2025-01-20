@@ -19,6 +19,7 @@ pub async fn handle_ping(
         return Err(ApiError::InvalidSignature);
     }
 
+    // Key is in a format timestamp:public_key
     let key = format!("{}:{}", data.message.timestamp, data.public_key);
     let value = serde_json::to_vec(&data.message)
         .map_err(|e| ApiError::SerializationError(e.to_string()))?;

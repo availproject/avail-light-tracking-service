@@ -4,7 +4,6 @@ use crate::{
 };
 use rocksdb::{IteratorMode, DB};
 use std::path::Path;
-use tracing::info;
 
 pub struct RocksStorage {
     db: DB,
@@ -46,23 +45,12 @@ impl RocksStorage {
         }
 
         if let Some(last_message) = last_ping {
-            if !timestamps.is_empty() {
-                timestamps.sort_unstable();
-
-                // Calculate total uptime
-                // For this example, we'll assume each ping represents 1 minute of uptime
-                let total_uptime = timestamps.len() as i64 * 60; // Convert to seconds
-
-                Ok(Some(ClientInfo {
-                    first_seen: *timestamps.first().unwrap(),
-                    last_seen: *timestamps.last().unwrap(),
-                    total_uptime,
-                    peer_id: last_message.peer_id,
-                    last_multiaddr: last_message.multiaddr,
-                }))
-            } else {
-                Ok(None)
-            }
+            Ok(Some(ClientInfo {
+                first_seen: *timestamps.first().unwrap(),
+                last_seen: *timestamps.last().unwrap(),
+                peer_id: last_message.peer_id,
+                last_multiaddr: last_message.multiaddr,
+            }))
         } else {
             Ok(None)
         }
