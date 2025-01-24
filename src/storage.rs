@@ -2,16 +2,21 @@ use crate::{
     error::ApiError,
     types::{ClientInfo, PingMessage},
 };
-use rocksdb::{IteratorMode, DB};
+use rocksdb::{IteratorMode, Options, TransactionDB, TransactionDBOptions};
 use std::path::Path;
 
 pub struct RocksStorage {
-    db: DB,
+    db: TransactionDB,
 }
 
 impl RocksStorage {
     pub fn new<P: AsRef<Path>>(path: P) -> Result<Self, ApiError> {
-        let db = DB::open_default(path).map_err(|e| ApiError::DatabaseError(e.to_string()))?;
+        let mut opts = Options::default();
+        opts.set_max_background_jobs(4);
+        opts.set_bytes_per_sync(1024 * 1024); // 1mb
+
+        let db = TransactionDB::open(&opts, &TransactionDBOptions::default(), path)
+            .map_err(|e| ApiError::DatabaseError(e.to_string()))?;
         Ok(Self { db })
     }
 
