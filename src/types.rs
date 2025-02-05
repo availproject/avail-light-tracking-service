@@ -3,9 +3,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PingMessage {
     pub timestamp: i64,
-    pub multiaddr: String,
-    pub peer_id: String,
-    pub block_number: String,
+    pub multiaddr: Option<String>,
+    pub peer_id: Option<String>,
+    pub block_number: u32,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -19,6 +19,6 @@ pub struct SignedPingMessage {
 pub struct ClientInfo {
     pub first_seen: i64,
     pub last_seen: i64,
-    pub peer_id: String,
-    pub last_multiaddr: String,
+    pub peer_id: Option<String>,
+    pub last_multiaddr: Option<String>,
 }

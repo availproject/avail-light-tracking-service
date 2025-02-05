@@ -28,9 +28,9 @@ mod tests {
     fn create_test_message() -> PingMessage {
         PingMessage {
             timestamp: 1234567890,
-            multiaddr: "/ip4/127.0.0.1/tcp/30333".to_string(),
-            peer_id: "12D3KooWBmAwcd4PJNJvfV89HwE48nwkRmAgo8Vy3uQEyNNHBox2".to_string(),
-            block_number: "123456".to_string(),
+            multiaddr: Some("/ip4/127.0.0.1/tcp/30333".to_string()),
+            peer_id: Some("12D3KooWBmAwcd4PJNJvfV89HwE48nwkRmAgo8Vy3uQEyNNHBox2".to_string()),
+            block_number: 123456,
         }
     }
 
@@ -107,7 +107,7 @@ mod tests {
 
         let mut tampered_message = original_message.clone();
         tampered_message.peer_id =
-            "12D3KooWHDNG8W9q4oVqfJ8CG7G6XwzHhp3QbKSU4LGKrH9NVsJN".to_string();
+            Some("12D3KooWHDNG8W9q4oVqfJ8CG7G6XwzHhp3QbKSU4LGKrH9NVsJN".to_string());
 
         let result =
             verify_sr25519_signature(&ss58_public_key, &tampered_message, signature.to_vec());

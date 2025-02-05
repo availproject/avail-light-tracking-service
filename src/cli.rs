@@ -11,8 +11,8 @@ pub struct ServerCliOpts {
     pub server_addr: String,
     #[arg(
         long,
-        default_value = "8080",
-        help = "Avail Light Client Tracker listen port. Default: 8080"
+        default_value = "8989",
+        help = "Avail Light Client Tracker listen port. Default: 8989"
     )]
     pub server_port: u16,
     #[arg(
@@ -35,8 +35,8 @@ pub struct ClientCliOpts {
     pub server_addr: String,
     #[arg(
         long,
-        default_value = "8080",
-        help = "Avail Light Client Tracker listen port. Default: 8080"
+        default_value = "8989",
+        help = "Avail Light Client Tracker listen port. Default: 8989"
     )]
     pub server_port: u16,
     #[arg(long, default_value = "info", help = "Log verbosity. Default: info")]
