@@ -5,7 +5,7 @@ pub struct PingMessage {
     pub timestamp: i64,
     pub multiaddr: Option<String>,
     pub peer_id: Option<String>,
-    pub block_number: u32,
+    pub latest_block: Option<u32>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -17,8 +17,9 @@ pub struct SignedPingMessage {
 
 #[derive(Debug, Serialize)]
 pub struct ClientInfo {
-    pub first_seen: i64,
-    pub last_seen: i64,
+    pub first_seen: Option<i64>,
+    pub last_seen: Option<i64>,
     pub peer_id: Option<String>,
     pub last_multiaddr: Option<String>,
+    pub latest_block: Option<u32>,
 }

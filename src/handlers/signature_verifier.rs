@@ -30,7 +30,7 @@ mod tests {
             timestamp: 1234567890,
             multiaddr: Some("/ip4/127.0.0.1/tcp/30333".to_string()),
             peer_id: Some("12D3KooWBmAwcd4PJNJvfV89HwE48nwkRmAgo8Vy3uQEyNNHBox2".to_string()),
-            block_number: 123456,
+            latest_block: Some(123456),
         }
     }
 

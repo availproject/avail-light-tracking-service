@@ -51,10 +51,11 @@ impl RocksStorage {
 
         if let Some(last_message) = last_ping {
             Ok(Some(ClientInfo {
-                first_seen: *timestamps.first().unwrap(),
-                last_seen: *timestamps.last().unwrap(),
+                first_seen: timestamps.last().copied(),
+                last_seen: timestamps.first().copied(),
                 peer_id: last_message.peer_id,
                 last_multiaddr: last_message.multiaddr,
+                latest_block: last_message.latest_block,
             }))
         } else {
             Ok(None)
