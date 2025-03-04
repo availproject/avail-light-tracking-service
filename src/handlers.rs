@@ -1,7 +1,8 @@
 use crate::{error::ApiError, storage::RocksStorage, types::SignedPingMessage};
 use actix_web::{web, HttpResponse};
+use chrono::Utc;
 use signature_verifier::verify_sr25519_signature;
-use tracing::trace;
+use tracing::{error, info, trace};
 
 mod signature_verifier;
 
@@ -16,11 +17,22 @@ pub async fn handle_ping(
     trace!("Public key received: {}", data.public_key);
 
     if !is_valid {
+        trace!("Invalid signature for client: {}", data.public_key);
         return Err(ApiError::InvalidSignature);
     }
 
+    let current_time = Utc::now().timestamp();
+
+    // TODO: additional timestamp checks might be needed
+    if current_time < data.message.timestamp {
+        error!("Invalid timestamp");
+        return Err(ApiError::InvalidTimestamp);
+    }
+
+    info!("Stored message: {:?}", data.message);
+
     // Key is in a format timestamp:public_key
-    let key = format!("{}:{}", data.message.timestamp, data.public_key);
+    let key = format!("{}:{}", current_time, data.public_key);
     let value = serde_json::to_vec(&data.message)
         .map_err(|e| ApiError::SerializationError(e.to_string()))?;
 

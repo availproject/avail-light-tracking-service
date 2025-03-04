@@ -4,6 +4,8 @@ use thiserror::Error;
 pub enum ApiError {
     #[error("Invalid signature")]
     InvalidSignature,
+    #[error("Invalid timestamp")]
+    InvalidTimestamp,
     #[error("Database error: {0}")]
     DatabaseError(String),
     #[error("Serialization error: {0}")]
