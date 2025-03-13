@@ -31,9 +31,13 @@ For more CLI options run:
 
 ## API endpoints
 
-`/ping` - Avail Light Client delivers its ping payload using a POST method to this endpoint
+### GET /client-info/{public_key}
 
-`/client-info/{public_key}` - GET request to this endpoint returns information about the light client with the provided public key
+Retrieves information about a light client identified by its public key.
+
+### POST /ping
+
+Endpoint for Avail Light Client to deliver its ping payload.
 
 
 ## Notes

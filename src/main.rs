@@ -31,7 +31,7 @@ async fn main() -> Result<()> {
             .app_data(web::Data::from(Arc::clone(&storage)))
             .route("/ping", web::post().to(handlers::handle_ping))
             .route(
-                "/client-info/{peer_id}",
+                "/client-info/{public_key}",
                 web::get().to(handlers::handle_client_info),
             )
     })
