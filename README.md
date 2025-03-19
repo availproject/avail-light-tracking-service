@@ -7,6 +7,10 @@ If enabled by the Avail LCs they send a periodic heartbeat message on the `/ping
 
 The Avail Tracking Service verifies the incoming ping using the SS58 encoded LCs public key and stores it locally in RocksDB. Tracking Service data is persisted across restarts (WIP).
 
+## ⚠️ Warning
+
+**This is an alpha version of the Avail Light Tracking Service. Additional features are currently in development, and bugs are to be expected. Use in production environments is not recommended at this stage.**
+
 ## Setup
 
 Build the tracker from source:
