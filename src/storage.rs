@@ -14,6 +14,7 @@ impl RocksStorage {
         let mut opts = Options::default();
         opts.set_max_background_jobs(4);
         opts.set_bytes_per_sync(1024 * 1024); // 1mb
+        opts.create_if_missing(true);
 
         let db = TransactionDB::open(&opts, &TransactionDBOptions::default(), path)
             .map_err(|e| ApiError::DatabaseError(e.to_string()))?;
