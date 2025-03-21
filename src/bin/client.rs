@@ -3,8 +3,6 @@ use avail_light_tracking_service::cli::ClientCliOpts;
 use avail_light_tracking_service::types::{PingMessage, SignedPingMessage};
 use chrono::Utc;
 use clap::Parser;
-use reqwest;
-use serde_json;
 use sp_core::Pair;
 use sp_core::{crypto::Ss58Codec, sr25519::Pair as Sr25519Pair};
 use tracing::{info, Level, Subscriber};
