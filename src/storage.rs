@@ -52,6 +52,7 @@ impl RocksStorage {
 
         if let Some(last_message) = last_ping {
             Ok(Some(ClientInfo {
+                operator_address: last_message.operator_address,
                 first_seen: timestamps.last().copied(),
                 last_seen: timestamps.first().copied(),
                 peer_id: last_message.peer_id,
