@@ -57,7 +57,7 @@ Or, in the `identity.toml` file in the LC working directory
 
 ### GET /client-info/{public_key}
 
-Retrieves information about a light client identified by its public key (ss58 encoded format).
+Retrieves information about a light client identified by its ss58 address.
 
 ### POST /ping
 
