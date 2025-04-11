@@ -13,7 +13,7 @@ The Avail Tracking Service verifies the incoming ping using the SS58 encoded LCs
 
 ## Setup
 
-Build the tracker from source:
+### Build the tracker from source:
 
 ```sh
 git clone git@github.com:availproject/avail-light-tracking-service.git
@@ -31,6 +31,37 @@ For more CLI options run:
 
 ```sh
 ./target/release/avail-light-tracking-service --help
+```
+
+### Using Docker
+
+```sh
+# Clone this repository or copy the Dockerfile to your local machine
+git clone https://github.com/availproject/avail-light-tracking-service
+cd avail-light-tracking-service
+
+# Build the Docker image
+docker build -t avail-light-tracking-service .
+```
+
+Run the service:
+
+```sh
+# Run with default settings
+docker run -d --name avail-tracker \
+  -p 8989:8989 \
+  -v avail-tracker-data:/app/data \
+  avail-light-tracking-service
+
+# Run with custom settings
+docker run -d --name avail-tracker \
+  -p 9000:9000 \
+  -v avail-tracker-data:/app/data \
+  -e SERVER_ADDR=0.0.0.0 \
+  -e SERVER_PORT=9000 \
+  -e DB_PATH=/app/data \
+  -e VERBOSITY=debug \
+  avail-light-tracking-service
 ```
 
 ## Enabling tracking on the Avail Light Client
