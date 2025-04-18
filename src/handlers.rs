@@ -1,6 +1,7 @@
 use crate::{error::ApiError, storage::RocksStorage, types::SignedPingMessage};
 use actix_web::{web, HttpResponse};
 use chrono::Utc;
+use serde_json::json;
 use signature_verifier::verify_sr25519_signature;
 use tracing::{error, info, trace};
 
@@ -49,4 +50,8 @@ pub async fn handle_client_info(
         Some(client_info) => Ok(HttpResponse::Ok().json(client_info)),
         None => Ok(HttpResponse::NotFound().json("No data found for this peer")),
     }
+}
+
+pub async fn status() -> Result<HttpResponse, ApiError> {
+    return Ok(HttpResponse::Ok().json(json!({"message": "Server is up and running!"})));
 }

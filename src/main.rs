@@ -34,6 +34,7 @@ async fn main() -> Result<()> {
                 "/client-info/{public_key}",
                 web::get().to(handlers::handle_client_info),
             )
+            .route("/status", web::get().to(handlers::status))
     })
     .bind(format!("{}:{}", opts.server_addr, opts.server_port))?
     .run()
