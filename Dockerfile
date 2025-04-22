@@ -1,4 +1,5 @@
 FROM rust:1.86-slim AS builder
+ARG BUILD_PROFILE=release
 
 WORKDIR /usr/src/avail-tracker
 RUN apt-get update && \
@@ -9,7 +10,7 @@ RUN apt-get update && \
 
 COPY . .
 
-RUN cargo build --release
+RUN cargo build --$BUILD_PROFILE
 
 FROM debian:stable-slim AS runner
 WORKDIR /avail-tracker
